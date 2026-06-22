@@ -15,16 +15,17 @@ An educational project to replicate the functionality of `systemd-journald` insi
 - [x] Use Early Returns (`return;`) to process command-line arguments (`$1` via `env::args()`) without nesting logic in `else` blocks.
 - [x] *Lesson Learned:* Rust expects valid UTF-8 text on `stdin`. Piping raw binaries (like `cat /bin/bash | ./mirror`) will cause a panic unless explicitly handled as raw bytes.
 
-### [ ] Milestone 2: Runit's Hidden Plumbing (Connecting the Source)
-- [ ] **The Goal:** Force `runit` to use this binary instead of `svlogd`.
-- [ ] Compile a release build: `cargo build --release`.
-- [ ] Copy the binary to a service's log directory (e.g., `/etc/runit/sv/emacs-runit/log/`).
-- [ ] Modify the `log/run` script to pipe the service's output into the Rust binary, redirecting the Rust output to a file:
+### [x] Milestone 2: Runit's Hidden Plumbing (Connecting the Source)
+- [x] **The Goal:** Force `runit` to use this binary instead of `svlogd`.
+- [x] Compile a release build: `cargo build --release`.
+- [x] Copy the binary to a service's log directory (e.g., `/etc/runit/sv/cups/log/`).
+- [x] Modify the `log/run` script to pipe the service's output into the Rust binary, redirecting the Rust output to a file:
   ```bash
   #!/bin/sh
-  exec ./mirror >> /var/log/emacs-test.log
+  [ -d /var/log/cups ] || install -dm755 /var/log/cups
+  exec ./mirror >> /var/log/cups/cups.log
   ```
-- [ ] Bring the service up and verify logs are written.
+- [x] Bring the service up and verify logs are written.
 
 ### [ ] Milestone 3: Inter-Process Communication (The Socket)
 
